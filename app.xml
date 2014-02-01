@@ -1,0 +1,103 @@
+<application xmlns="http://ns.adobe.com/air/application/3.9">
+    
+    <android>
+        <!-- <colorDepth>16bit</colorDepth> -->
+        <manifestAdditions>
+            <![CDATA[
+            <manifest android:installLocation="auto"> 
+
+                <application android:hardwareAccelerated="true" />
+                <uses-sdk android:minSdkVersion="8" />
+
+                <!-- enable/disable based on your requirements -->
+
+                <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/> 
+                <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/> 
+                <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/> 
+                <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/> 
+                <uses-permission android:name="android.permission.CAMERA"/> 
+                <uses-permission android:name="android.permission.READ_PHONE_STATE"/> 
+                <uses-permission android:name="android.permission.RECORD_AUDIO"/> 
+                <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/> 
+                <uses-permission android:name="android.permission.INTERNET"/> 
+                <uses-permission android:name="android.permission.WAKE_LOCK"/> 
+                <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> 
+                
+
+                <uses-feature android:name="android.hardware.touchscreen.multitouch" android:required="true"/>
+                <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true"/>
+                <uses-feature android:name="android.hardware.camera" android:required="false"/> 
+                <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/> 
+                <uses-feature android:name="android.hardware.camera.flash" android:required="false"/> 
+                <uses-feature android:name="android.hardware.camera.front" android:required="false"/> 
+                <uses-feature android:name="android.hardware.camera.any" android:required="false"/> 
+                <uses-feature android:name="android.hardware.microphone" android:required="false"/> 
+
+            </manifest> 
+            ]]>
+        </manifestAdditions>
+    </android>
+
+    <filename>Haxe AIR Template</filename>
+    <id>air.template.haxe</id> <!-- sync with Makefile's PACKAGE_ID -->
+    <name>HaxeAIRTemplate</name>
+    <supportedLanguages>en</supportedLanguages>
+    <supportedProfiles>mobileDevice</supportedProfiles>
+    <versionLabel>1.0.0</versionLabel>
+    <versionNumber>1.0.0</versionNumber>
+
+    <icon>
+        <!-- Android -->
+        <image36x36>icons/icon_36.png</image36x36>
+        <image48x48>icons/icon_48.png</image48x48>
+        <image72x72>icons/icon_72.png</image72x72>
+        <image96x96>icons/icon_96.png</image96x96>
+        <image144x144>icons/icon_144.png</image144x144>
+
+        <!-- iOS -->
+
+    </icon>
+
+    <initialWindow>
+        <aspectRatio>portrait</aspectRatio> <!-- portrait, landscape, any -->
+        <autoOrients>false</autoOrients>
+        <content>haxe-air-template.swf</content> <!-- sync with Makefile's APP_NAME -->
+        <!-- <depthAndStencil>false</depthAndStencil> -->
+        <fullScreen>true</fullScreen>
+        <renderMode>gpu</renderMode> <!-- cpu, direct, gpu -->
+        <softKeyboardBehavior>pan</softKeyboardBehavior> 
+    </initialWindow>
+
+    <iPhone>
+        <Entitlements>
+            <![CDATA[
+
+            ]]>
+        </Entitlements>
+        <InfoAdditions>
+            <![CDATA[
+
+            <key>UIStatusBarStyle</key> 
+            <string>UIStatusBarStyleBlackOpaque</string> 
+            <key>UIRequiresPersistentWiFi</key> 
+            <string>NO</string>
+            <key>UIPrerenderedIcon</key>  
+            <true/>
+            <key>UIApplicationExitsOnSuspend</key>
+            <true/>
+            
+            <key>UIDeviceFamily</key>
+            <array>
+                <!-- iPhone support -->
+                <string>1</string> 
+                <!-- iPad support -->
+                <!--<string>2</string>-->
+            </array>
+            
+            ]]>
+        </InfoAdditions>
+        <forceCPURenderModeForDevices></forceCPURenderModeForDevices>
+        <requestedDisplayResolution excludeDevices="" >high</requestedDisplayResolution>
+    </iPhone>
+
+</application>
