@@ -38,9 +38,9 @@
         </manifestAdditions>
     </android>
 
-    <filename>Haxe AIR Template</filename>
+    <filename>haxe-air-template</filename>
     <id>air.template.haxe</id> <!-- sync with Makefile's PACKAGE_ID -->
-    <name>HaxeAIRTemplate</name>
+    <name>Haxe AIR Template</name>
     <supportedLanguages>en</supportedLanguages>
     <supportedProfiles>mobileDevice</supportedProfiles>
     <versionLabel>1.0.0</versionLabel>
