@@ -35,6 +35,9 @@ ADL_FLAGS   += -screensize $(SWF_WIDTH)x$(SWF_HEIGHT):$(SWF_WIDTH)x$(SWF_HEIGHT)
 ADL_FLAGS   += app.xml
 ADL_FLAGS   += $(SWF_HOME)
 
+export WINEDEBUG=-all
+export AIR_NOANDROIDFLAIR=true
+
 
 
 .PHONY: all clean swf swf-dbg hxml apk apk-dbg apk-install swf-run apk-run apk-log
@@ -47,17 +50,15 @@ swf-dbg:
 	@$(HAXE) $(BUILD_FLAGS) -swf $(SWF_HOME)/$(APP_NAME).swf -debug -D fdb
 
 swf-run:
-	@WINEDEBUG=-all $(ADL) $(ADL_FLAGS)
+	@$(ADL) $(ADL_FLAGS)
 
 apk: $(CER_HOME)/android/$(APP_NAME).p12 swf
-	@AIR_NOANDROIDFLAIR=true \
-	$(ADT) -package -target apk-captive-runtime $(SIGNING_OPT) $(PKG_HOME)/$(APP_NAME).apk app.xml \
+	@$(ADT) -package -target apk-captive-runtime $(SIGNING_OPT) $(PKG_HOME)/$(APP_NAME).apk app.xml \
 	-C $(SWF_HOME) $(APP_NAME).swf \
 	-C res/android icons
 
 apk-dbg: $(CER_HOME)/android/$(APP_NAME).p12 swf-dbg
-	@AIR_NOANDROIDFLAIR=true \
-	$(ADT) -package -target apk-debug $(SIGNING_OPT) $(PKG_HOME)/$(APP_NAME).apk app.xml \
+	@$(ADT) -package -target apk-debug $(SIGNING_OPT) $(PKG_HOME)/$(APP_NAME).apk app.xml \
 	-C $(SWF_HOME) $(APP_NAME).swf \
 	-C res/android icons
 
@@ -75,14 +76,14 @@ clean:
 
 hxml:
 	@rm -f build.hxml
-	@echo "$(patsubst %,-cp %,$(HAXE_PATH))" >> build.hxml
-	@echo "-main $(HAXE_MAIN)" >> build.hxml
-	@echo "$(patsubst %,-lib %,$(HAXE_LIBS))" >> build.hxml
-	@echo "-swf dummy.swf" >> build.hxml
-	@echo "-swf-version $(SWF_VERSION)" >> build.hxml
-	@echo "-swf-header $(SWF_WIDTH):$(SWF_HEIGHT):$(SWF_FPS):$(SWF_COLOR)" >> build.hxml
-	@echo "--flash-strict" >> build.hxml
-	@echo "--no-output" >> build.hxml
+	@echo $(patsubst %,-cp %,$(HAXE_PATH)) >> build.hxml
+	@echo -main $(HAXE_MAIN) >> build.hxml
+	@echo $(patsubst %,-lib %,$(HAXE_LIBS)) >> build.hxml
+	@echo -swf dummy.swf >> build.hxml
+	@echo -swf-version $(SWF_VERSION) >> build.hxml
+	@echo -swf-header $(SWF_WIDTH):$(SWF_HEIGHT):$(SWF_FPS):$(SWF_COLOR) >> build.hxml
+	@echo --flash-strict >> build.hxml
+	@echo --no-output >> build.hxml
 
 $(CER_HOME)/android/$(APP_NAME).p12:
 	@$(ADT) \
