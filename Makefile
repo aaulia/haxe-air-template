@@ -2,7 +2,7 @@ HAXE_MAIN   := Main
 HAXE_PATH   := src
 HAXE_LIBS   := air3
 
-SWF_VERSION := 11.3
+SWF_VERSION := 11.4
 SWF_WIDTH   := 405
 SWF_HEIGHT  := 720
 SWF_FPS     := 60
@@ -35,6 +35,8 @@ ADL_FLAGS   += -screensize $(SWF_WIDTH)x$(SWF_HEIGHT):$(SWF_WIDTH)x$(SWF_HEIGHT)
 ADL_FLAGS   += app.xml
 ADL_FLAGS   += $(SWF_HOME)
 
+
+
 export WINEDEBUG=-all
 export AIR_NOANDROIDFLAIR=true
 
@@ -44,7 +46,7 @@ export AIR_NOANDROIDFLAIR=true
 
 all: clean swf
 swf:
-	@$(HAXE) $(BUILD_FLAGS) -swf $(SWF_HOME)/$(APP_NAME).swf --no-traces
+	@$(HAXE) $(BUILD_FLAGS) -swf $(SWF_HOME)/$(APP_NAME).swf --no-traces -D advanced-telemetry
 
 swf-dbg:
 	@$(HAXE) $(BUILD_FLAGS) -swf $(SWF_HOME)/$(APP_NAME).swf -debug -D fdb
