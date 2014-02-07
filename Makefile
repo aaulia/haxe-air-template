@@ -46,37 +46,46 @@ export AIR_NOANDROIDFLAIR=true
 
 all: clean swf
 swf:
+	@echo [-] Building swf
 	@$(HAXE) $(BUILD_FLAGS) -swf $(SWF_HOME)/$(APP_NAME).swf --no-traces -D advanced-telemetry
 
 swf-dbg:
+	@echo [-] Building debug swf
 	@$(HAXE) $(BUILD_FLAGS) -swf $(SWF_HOME)/$(APP_NAME).swf -debug -D fdb
 
 swf-run:
+	@echo [-] Running swf through AIR Debug Launcher
 	@$(ADL) $(ADL_FLAGS)
 
-apk: $(CER_HOME)/android/$(APP_NAME).p12 swf
+apk: swf $(CER_HOME)/android/$(APP_NAME).p12
+	@echo [-] Building Android Package \(APK\)
 	@$(ADT) -package -target apk-captive-runtime $(SIGNING_OPT) $(PKG_HOME)/$(APP_NAME).apk app.xml \
 	-C $(SWF_HOME) $(APP_NAME).swf \
 	-C res/android icons
 
-apk-dbg: $(CER_HOME)/android/$(APP_NAME).p12 swf-dbg
+apk-dbg: swf-dbg $(CER_HOME)/android/$(APP_NAME).p12
+	@echo [-] Building debug Android Package \(APK\)
 	@$(ADT) -package -target apk-debug $(SIGNING_OPT) $(PKG_HOME)/$(APP_NAME).apk app.xml \
 	-C $(SWF_HOME) $(APP_NAME).swf \
 	-C res/android icons
 
 apk-run:
+	@echo [-] Running on Android device/emulator
 	@$(ADB) install -r $(PKG_HOME)/$(APP_NAME).apk
 	@$(ADB) shell am start -n $(PACKAGE_ID)/.AppEntry
 
 apk-log:
+	@echo [-] Start Android Logcat
 	@$(ADB) logcat -c
 	@$(ADB) logcat $(PACKAGE_ID):I *:S
 
 clean:
+	@echo [-] Cleaning
 	@rm -f $(SWF_HOME)/$(APP_NAME).swf
 	@rm -f $(PKG_HOME)/$(APP_NAME).apk
 
 hxml:
+	@echo [-] Generating HXML file
 	@rm -f build.hxml
 	@echo $(patsubst %,-cp %,$(HAXE_PATH)) >> build.hxml
 	@echo -main $(HAXE_MAIN) >> build.hxml
@@ -88,5 +97,6 @@ hxml:
 	@echo --no-output >> build.hxml
 
 $(CER_HOME)/android/$(APP_NAME).p12:
+	@echo [-] Generating Android certificate
 	@$(ADT) \
 	-certificate -cn SelfSign -ou Self -o Self -validityPeriod 25 2048-RSA $@ $(CER_PASS)
