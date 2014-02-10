@@ -1,5 +1,5 @@
 HAXE_MAIN   := Main
-HAXE_PATH   := src
+SOURCE_PATH := src
 HAXE_LIBS   := air3
 
 SWF_VERSION := 11.4
@@ -21,7 +21,7 @@ ADL         := adl
 ADT         := adt
 HAXE        := haxe
 
-BUILD_FLAGS += $(patsubst %,-cp %, $(HAXE_PATH))
+BUILD_FLAGS += $(patsubst %,-cp %, $(SOURCE_PATH))
 BUILD_FLAGS += $(patsubst %,-lib %,$(HAXE_LIBS))
 BUILD_FLAGS += -main $(HAXE_MAIN)
 BUILD_FLAGS += --flash-strict
@@ -61,13 +61,15 @@ apk: swf $(CER_HOME)/android/$(APP_NAME).p12
 	@echo [-] Building Android Package \(APK\)
 	@$(ADT) -package -target apk-captive-runtime $(SIGNING_OPT) $(PKG_HOME)/$(APP_NAME).apk app.xml \
 	-C $(SWF_HOME) $(APP_NAME).swf \
-	-C res/android icons
+	-C res/android icons \
+	-C res assets
 
 apk-dbg: swf-dbg $(CER_HOME)/android/$(APP_NAME).p12
 	@echo [-] Building debug Android Package \(APK\)
 	@$(ADT) -package -target apk-debug $(SIGNING_OPT) $(PKG_HOME)/$(APP_NAME).apk app.xml \
 	-C $(SWF_HOME) $(APP_NAME).swf \
-	-C res/android icons
+	-C res/android icons \
+	-C res assets
 
 apk-run:
 	@echo [-] Running on Android device/emulator
