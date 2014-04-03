@@ -2,7 +2,7 @@ HAXE_MAIN   := Main
 SOURCE_PATH := src
 HAXE_LIBS   := air3
 
-SWF_VERSION := 11.4
+SWF_VERSION := 11.2
 SWF_WIDTH   := 405
 SWF_HEIGHT  := 720
 SWF_FPS     := 60
@@ -11,6 +11,11 @@ SWF_COLOR   := 012345
 SWF_HOME    := bin
 PKG_HOME    := pkg
 CER_HOME    := cer
+RES_HOME    := res
+ANE_HOME    := ane
+LIB_HOME    := lib
+
+ANE_SWF_LIB := $(sort $(wildcard $(LIB_HOME)/$(ANE_HOME)/*/library.swf))
 
 PACKAGE_ID  := air.template.haxe
 APP_NAME    := haxe-air-template
@@ -23,18 +28,24 @@ HAXE        := haxe
 
 BUILD_FLAGS += $(patsubst %,-cp %, $(SOURCE_PATH))
 BUILD_FLAGS += $(patsubst %,-lib %,$(HAXE_LIBS))
+BUILD_FLAGS += $(patsubst %,-swf-lib %,$(ANE_SWF_LIB))
 BUILD_FLAGS += -main $(HAXE_MAIN)
 BUILD_FLAGS += --flash-strict
 BUILD_FLAGS += -swf-version $(SWF_VERSION)
 BUILD_FLAGS += -swf-header $(SWF_WIDTH):$(SWF_HEIGHT):$(SWF_FPS):$(SWF_COLOR)
 
 SIGNING_OPT := -storetype pkcs12 -keystore $(CER_HOME)/android/$(APP_NAME).p12 -storepass $(CER_PASS)
+ADT_FLAGS   += $(SIGNING_OPT) $(PKG_HOME)/$(APP_NAME).apk app.xml
+ADT_FLAGS   += -C $(SWF_HOME) $(APP_NAME).swf
+ADT_FLAGS   += -C $(RES_HOME)/android icons
+ADT_FLAGS   += -extdir $(ANE_HOME)/
+
 
 ADL_FLAGS   += -profile mobileDevice
 ADL_FLAGS   += -screensize $(SWF_WIDTH)x$(SWF_HEIGHT):$(SWF_WIDTH)x$(SWF_HEIGHT)
 ADL_FLAGS   += app.xml
 ADL_FLAGS   += $(SWF_HOME)
-
+ADL_FLAGS   += -extdir $(LIB_HOME)/$(ANE_HOME)/
 
 
 export WINEDEBUG=-all
@@ -59,17 +70,11 @@ swf-run:
 
 apk: swf $(CER_HOME)/android/$(APP_NAME).p12
 	@echo [-] Building Android Package \(APK\)
-	@$(ADT) -package -target apk-captive-runtime $(SIGNING_OPT) $(PKG_HOME)/$(APP_NAME).apk app.xml \
-	-C $(SWF_HOME) $(APP_NAME).swf \
-	-C res/android icons \
-	-C res assets
+	@$(ADT) -package -target apk-captive-runtime $(ADT_FLAGS)
 
 apk-dbg: swf-dbg $(CER_HOME)/android/$(APP_NAME).p12
 	@echo [-] Building debug Android Package \(APK\)
-	@$(ADT) -package -target apk-debug $(SIGNING_OPT) $(PKG_HOME)/$(APP_NAME).apk app.xml \
-	-C $(SWF_HOME) $(APP_NAME).swf \
-	-C res/android icons \
-	-C res assets
+	@$(ADT) -package -target apk-debug $(ADT_FLAGS)
 
 apk-run:
 	@echo [-] Running on Android device/emulator
@@ -90,8 +95,9 @@ hxml:
 	@echo [-] Generating HXML file
 	@rm -f build.hxml
 	@echo $(patsubst %,-cp %,$(HAXE_PATH)) >> build.hxml
-	@echo -main $(HAXE_MAIN) >> build.hxml
 	@echo $(patsubst %,-lib %,$(HAXE_LIBS)) >> build.hxml
+	@echo $(patsubst %,-swf-lib %,$(ANE_SWF_LIB)) >> build.hxml
+	@echo -main $(HAXE_MAIN) >> build.hxml
 	@echo -swf dummy.swf >> build.hxml
 	@echo -swf-version $(SWF_VERSION) >> build.hxml
 	@echo -swf-header $(SWF_WIDTH):$(SWF_HEIGHT):$(SWF_FPS):$(SWF_COLOR) >> build.hxml

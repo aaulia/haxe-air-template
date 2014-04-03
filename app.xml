@@ -1,4 +1,4 @@
-<application xmlns="http://ns.adobe.com/air/application/3.9">
+<application xmlns="http://ns.adobe.com/air/application/4.0">
     
     <android>
         <!-- <colorDepth>16bit</colorDepth> -->
@@ -99,5 +99,9 @@
         <forceCPURenderModeForDevices></forceCPURenderModeForDevices>
         <requestedDisplayResolution excludeDevices="" >high</requestedDisplayResolution>
     </iPhone>
+
+    <extensions>
+        <!-- <extensionID>id.extension.name</extensionID> -->
+    </extensions>
 
 </application>
