@@ -38,8 +38,8 @@ SIGNING_OPT := -storetype pkcs12 -keystore $(CER_HOME)/android/$(APP_NAME).p12 -
 ADT_FLAGS   += $(SIGNING_OPT) $(PKG_HOME)/$(APP_NAME).apk app.xml
 ADT_FLAGS   += -C $(SWF_HOME) $(APP_NAME).swf
 ADT_FLAGS   += -C $(RES_HOME)/android icons
+ADT_FLAGS   += -C $(RES_HOME) assets
 ADT_FLAGS   += -extdir $(ANE_HOME)/
-
 
 ADL_FLAGS   += -profile mobileDevice
 ADL_FLAGS   += -screensize $(SWF_WIDTH)x$(SWF_HEIGHT):$(SWF_WIDTH)x$(SWF_HEIGHT)
