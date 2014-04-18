@@ -94,7 +94,7 @@ clean:
 hxml:
 	@echo [-] Generating HXML file
 	@rm -f build.hxml
-	@echo $(patsubst %,-cp %,$(HAXE_PATH)) >> build.hxml
+	@echo $(patsubst %,-cp %,$(SOURCE_PATH)) >> build.hxml
 	@echo $(patsubst %,-lib %,$(HAXE_LIBS)) >> build.hxml
 	@echo $(patsubst %,-swf-lib %,$(ANE_SWF_LIB)) >> build.hxml
 	@echo -main $(HAXE_MAIN) >> build.hxml
