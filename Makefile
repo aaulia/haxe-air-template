@@ -21,10 +21,13 @@ PACKAGE_ID  := air.template.haxe
 APP_NAME    := haxe-air-template
 CER_PASS    := android-cer-password
 
+ANDROID_SDK := $(AIR_ANDROID_SDK_HOME)
+
 ADB         := adb
 ADL         := adl
 ADT         := adt
 HAXE        := haxe
+
 
 BUILD_FLAGS += $(patsubst %,-cp %, $(SOURCE_PATH))
 BUILD_FLAGS += $(patsubst %,-lib %,$(HAXE_LIBS))
@@ -40,6 +43,7 @@ ADT_FLAGS   += -C $(SWF_HOME) $(APP_NAME).swf
 ADT_FLAGS   += -C $(RES_HOME)/android icons
 ADT_FLAGS   += -C $(RES_HOME) assets
 ADT_FLAGS   += -extdir $(ANE_HOME)/
+ADT_FLAGS   += -platformsdk $(ANDROID_SDK)
 
 ADL_FLAGS   += -profile mobileDevice
 ADL_FLAGS   += -screensize $(SWF_WIDTH)x$(SWF_HEIGHT):$(SWF_WIDTH)x$(SWF_HEIGHT)
