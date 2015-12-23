@@ -12,31 +12,45 @@
             "working_dir": "${project_path}",
             "variants": [
                 {
-                    "name": "Run",
+                    "name": "SWF",
                     "cmd": [
                         "make",
-                        "swf-run"
+                        "swf"
                     ]
                 },
                 {
-                    "name": "AIR SWF (Debug)",
+                    "name": "SWF (Debug)",
                     "cmd": [
                         "make",
                         "swf-dbg"
                     ]
                 },
                 {
-                    "name": "Android APK",
+                    "name": "SWF Run",
+                    "cmd": [
+                        "make",
+                        "swf-run"
+                    ]
+                },
+                {
+                    "name": "APK",
                     "cmd": [
                         "make",
                         "apk"
                     ]
                 },
                 {
-                    "name": "Android APK (Debug)",
+                    "name": "APK (Debug)",
                     "cmd": [
                         "make",
                         "apk-dbg"
+                    ]
+                },
+                {
+                    "name": "APK Run",
+                    "cmd": [
+                        "make",
+                        "apk-run"
                     ]
                 },
                 {
