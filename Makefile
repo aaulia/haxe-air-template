@@ -21,7 +21,7 @@ PACKAGE_ID  := air.template.haxe
 APP_NAME    := haxe-air-template
 CER_PASS    := android-cer-password
 
-ANDROID_SDK := $(AIR_ANDROID_SDK_HOME)
+ANDROID_SDK := $(ANDROID_SDK)
 
 ADB         := adb
 ADL         := adl
@@ -57,7 +57,7 @@ export AIR_NOANDROIDFLAIR=true
 
 
 
-.PHONY: all clean swf swf-dbg hxml apk apk-dbg apk-install swf-run apk-run apk-log
+.PHONY: all clean swf swf-dbg swf-run apk apk-dbg apk-run apk-log hxml
 
 all: clean swf
 swf:

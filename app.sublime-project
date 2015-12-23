@@ -1,0 +1,74 @@
+{
+    "build_systems": [
+        {
+            "name": "HxAIR",
+            "cmd": [
+                "make"
+            ],
+            "selector": [
+                "source.haxe.2",
+                "source.hxml"
+            ],
+            "working_dir": "${project_path}",
+            "variants": [
+                {
+                    "name": "Run",
+                    "cmd": [
+                        "make",
+                        "swf-run"
+                    ]
+                },
+                {
+                    "name": "AIR SWF (Debug)",
+                    "cmd": [
+                        "make",
+                        "swf-dbg"
+                    ]
+                },
+                {
+                    "name": "Android APK",
+                    "cmd": [
+                        "make",
+                        "apk"
+                    ]
+                },
+                {
+                    "name": "Android APK (Debug)",
+                    "cmd": [
+                        "make",
+                        "apk-dbg"
+                    ]
+                },
+                {
+                    "name": "Clean",
+                    "cmd": [
+                        "make",
+                        "clean"
+                    ]
+                }
+            ]
+        }
+    ],
+    "folders": [
+        {
+            "file_include_patterns": [
+                "*.hx"
+            ],
+            "path": "src",
+            "name": "Source",
+            "file_exclude_patterns": [
+                ".*"
+            ]
+        },
+        {
+            "path": "res/assets",
+            "name": "Assets",
+            "file_exclude_patterns": [
+                ".*"
+            ]
+        }
+    ],
+    "settings": {
+        "FuzzyFilePath": {}
+    }
+}
