@@ -59,6 +59,13 @@
                         "make",
                         "clean"
                     ]
+                },
+                {
+                    "name": "Generate HXML",
+                    "cmd": [
+                        "make",
+                        "hxml"
+                    ]
                 }
             ]
         }
@@ -79,6 +86,15 @@
             "name": "Assets",
             "file_exclude_patterns": [
                 ".*"
+            ]
+        },
+        {
+            "path": ".",
+            "name": "Settings",
+            "folder_exclude_patterns": ["*"],
+            "file_include_patterns": [
+                "Makefile",
+                "app.xml"
             ]
         }
     ],
