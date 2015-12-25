@@ -2,11 +2,11 @@ HAXE_MAIN   := Main
 SOURCE_PATH := src
 HAXE_LIBS   := air3
 
-SWF_VERSION := 11.2
+SWF_VERSION := 17
 SWF_WIDTH   := 405
 SWF_HEIGHT  := 720
 SWF_FPS     := 60
-SWF_COLOR   := 012345
+SWF_COLOR   := 2b303b
 
 SWF_HOME    := bin
 PKG_HOME    := pkg
