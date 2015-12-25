@@ -1,13 +1,13 @@
-<application xmlns="http://ns.adobe.com/air/application/4.0">
+<application xmlns="http://ns.adobe.com/air/application/20.0">
     
     <android>
-        <!-- <colorDepth>16bit</colorDepth> -->
+        <colorDepth>32bit</colorDepth>
         <manifestAdditions>
             <![CDATA[
             <manifest android:installLocation="auto"> 
 
                 <application android:hardwareAccelerated="true" />
-                <uses-sdk android:minSdkVersion="8" />
+                <uses-sdk android:minSdkVersion="10" />
 
                 <!-- enable/disable based on your requirements -->
 
@@ -60,7 +60,7 @@
 
     <initialWindow>
         <aspectRatio>portrait</aspectRatio> <!-- portrait, landscape, any -->
-        <autoOrients>false</autoOrients>
+        <autoOrients>true</autoOrients>
         <content>haxe-air-template.swf</content> <!-- sync with Makefile's APP_NAME -->
         <!-- <depthAndStencil>false</depthAndStencil> -->
         <fullScreen>true</fullScreen>
