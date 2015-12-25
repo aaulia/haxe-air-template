@@ -72,6 +72,15 @@
     ],
     "folders": [
         {
+            "path": ".",
+            "name": "Setting",
+            "folder_exclude_patterns": ["*"],
+            "file_include_patterns": [
+                "Makefile",
+                "app.xml"
+            ]
+        },
+        {
             "file_include_patterns": [
                 "*.hx"
             ],
@@ -86,15 +95,6 @@
             "name": "Assets",
             "file_exclude_patterns": [
                 ".*"
-            ]
-        },
-        {
-            "path": ".",
-            "name": "Settings",
-            "folder_exclude_patterns": ["*"],
-            "file_include_patterns": [
-                "Makefile",
-                "app.xml"
             ]
         }
     ],
