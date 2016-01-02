@@ -38,13 +38,13 @@
         </manifestAdditions>
     </android>
 
-    <filename>haxe-air-template</filename>
-    <id>air.template.haxe</id> <!-- sync with Makefile's PACKAGE_ID -->
-    <name>Haxe AIR Template</name>
+    <filename>{APP_FILE}</filename>
+    <id>{PACKAGE_ID}</id>
+    <name>{APP_TITLE}</name>
     <supportedLanguages>en</supportedLanguages>
     <supportedProfiles>mobileDevice</supportedProfiles>
-    <versionLabel>1.0.0</versionLabel>
-    <versionNumber>1.0.0</versionNumber>
+    <versionLabel>{VER_LABEL}</versionLabel>
+    <versionNumber>{VER_NUMBER}</versionNumber>
 
     <icon>
         <!-- Android -->
@@ -59,12 +59,12 @@
     </icon>
 
     <initialWindow>
-        <aspectRatio>portrait</aspectRatio> <!-- portrait, landscape, any -->
-        <autoOrients>true</autoOrients>
-        <content>haxe-air-template.swf</content> <!-- sync with Makefile's APP_NAME -->
+        <aspectRatio>{ORIENTATION}</aspectRatio> 
+        <autoOrients>{AUTO_ORIENT}</autoOrients>
+        <content>{APP_FILE}.swf</content>
         <!-- <depthAndStencil>false</depthAndStencil> -->
         <fullScreen>true</fullScreen>
-        <renderMode>gpu</renderMode> <!-- cpu, direct, gpu -->
+        <renderMode>{RENDER_MODE}</renderMode> 
         <softKeyboardBehavior>pan</softKeyboardBehavior> 
     </initialWindow>
 
@@ -100,8 +100,7 @@
         <requestedDisplayResolution excludeDevices="" >high</requestedDisplayResolution>
     </iPhone>
 
-    <extensions>
-        <!-- <extensionID>id.extension.name</extensionID> -->
+    <extensions>{EXTENSION_IDS}
     </extensions>
 
 </application>
