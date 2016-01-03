@@ -38,9 +38,11 @@ RES_HOME    := res
 ANE_HOME    := ane
 LIB_HOME    := lib
 
-ANE_SWF_LIB := $(sort $(wildcard $(LIB_HOME)/$(ANE_HOME)/*/library.swf))
-ANE_EXT_IDS := $(shell find ./$(LIB_HOME)/$(ANE_HOME) -type f -name 'extension.xml' -exec grep -oP '(?<=<id>).*(?=</id>)' "{}" \;)
 ANDROID_SDK := $(ANDROID_SDK)
+
+ANE_SWF_LIB  = $(sort $(wildcard $(LIB_HOME)/$(ANE_HOME)/*/library.swf))
+ANE_EXT_IDS  = $(shell find ./$(LIB_HOME)/$(ANE_HOME) -type f -name 'extension.xml' -exec grep -oP '(?<=<id>).*(?=</id>)' "{}" \;)
+APP_XML_OUT := .app.xml.out
 
 BUILD_FLAGS += $(patsubst %,-cp %, $(SOURCE_PATH))
 BUILD_FLAGS += $(patsubst %,-lib %,$(HAXE_LIBS))
@@ -51,7 +53,7 @@ BUILD_FLAGS += -swf-version $(SWF_VERSION)
 BUILD_FLAGS += -swf-header $(SWF_WIDTH):$(SWF_HEIGHT):$(SWF_FPS):$(SWF_COLOR)
 
 SIGNING_OPT := -storetype pkcs12 -keystore $(CER_HOME)/android/$(APP_FILE).p12 -storepass $(CER_PASS)
-ADT_FLAGS   += $(SIGNING_OPT) $(PKG_HOME)/$(APP_FILE).apk app.xml.out
+ADT_FLAGS   += $(SIGNING_OPT) $(PKG_HOME)/$(APP_FILE).apk $(APP_XML_OUT)
 ADT_FLAGS   += -C $(SWF_HOME) $(APP_FILE).swf
 ADT_FLAGS   += -C $(RES_HOME)/android icons
 ADT_FLAGS   += -C $(RES_HOME) assets
@@ -60,7 +62,7 @@ ADT_FLAGS   += -platformsdk $(ANDROID_SDK)
 
 ADL_FLAGS   += -profile mobileDevice
 ADL_FLAGS   += -screensize $(SWF_WIDTH)x$(SWF_HEIGHT):$(SWF_WIDTH)x$(SWF_HEIGHT)
-ADL_FLAGS   += app.xml.out
+ADL_FLAGS   += $(APP_XML_OUT)
 ADL_FLAGS   += $(SWF_HOME)
 ADL_FLAGS   += -extdir $(LIB_HOME)/$(ANE_HOME)/
 
@@ -68,10 +70,10 @@ ADL_FLAGS   += -extdir $(LIB_HOME)/$(ANE_HOME)/
 
 export WINEDEBUG=-all
 export AIR_NOANDROIDFLAIR=true
+export UNZIP=-uq
 
 
-
-.PHONY: all clean swf swf-dbg swf-run apk apk-dbg apk-run apk-log hxml
+.PHONY: all clean swf swf-dbg swf-run apk apk-dbg apk-run apk-log hxml unpack-ane
 
 all: clean swf
 swf:
@@ -82,20 +84,19 @@ swf-dbg:
 	@echo [-] Building debug swf
 	@$(HAXE) $(BUILD_FLAGS) -swf $(SWF_HOME)/$(APP_FILE).swf -debug -D fdb
 
-swf-run: app.xml.out
+swf-run: unpack-ane
 	@echo [-] Running swf through AIR Debug Launcher
 	@$(ADL) $(ADL_FLAGS)
-	@rm app.xml.out
 
-apk: swf $(CER_HOME)/android/$(APP_FILE).p12 app.xml.out
+apk: swf $(CER_HOME)/android/$(APP_FILE).p12 $(APP_XML_OUT)
 	@echo [-] Building Android Package \(APK\)
 	@$(ADT) -package -target apk-captive-runtime $(ADT_FLAGS)
-	@rm app.xml.out
+	@rm -f $(APP_XML_OUT)
 
-apk-dbg: swf-dbg $(CER_HOME)/android/$(APP_FILE).p12 app.xml.out
+apk-dbg: swf-dbg $(CER_HOME)/android/$(APP_FILE).p12 $(APP_XML_OUT)
 	@echo [-] Building debug Android Package \(APK\)
 	@$(ADT) -package -target apk-debug $(ADT_FLAGS)
-	@rm app.xml.out
+	@rm -f $(APP_XML_OUT)
 
 apk-run:
 	@echo [-] Running on Android device/emulator
@@ -111,9 +112,10 @@ clean:
 	@echo [-] Cleaning
 	@rm -f $(SWF_HOME)/$(APP_FILE).swf
 	@rm -f $(PKG_HOME)/$(APP_FILE).apk
-	@rm -f app.xml.out
+	@rm -f $(APP_XML_OUT)
+	@rm -rf $(LIB_HOME)/$(ANE_HOME)/*
 
-hxml:
+hxml: unpack-ane
 	@echo [-] Generating HXML file
 	@rm -f build.hxml
 	@for src_path in $(SOURCE_PATH); do echo "-cp $$src_path"     >> build.hxml; done
@@ -126,21 +128,24 @@ hxml:
 	@echo --flash-strict >> build.hxml
 	@echo --no-output >> build.hxml
 
+unpack-ane:
+	@for ane in `find $(ANE_HOME) -type f -name '*.ane'`; do unzip $$ane -d $(LIB_HOME)/$(ANE_HOME)/$$(basename $$ane); done
+
 $(CER_HOME)/android/$(APP_FILE).p12:
 	@echo [-] Generating Android certificate
 	@$(ADT) \
 	-certificate -cn SelfSign -ou Self -o Self -validityPeriod 25 2048-RSA $@ $(CER_PASS)
 
-app.xml.out:
+$(APP_XML_OUT): unpack-ane
 	@echo [-] Generating Application Descriptor
-	@rm -f app.xml.out
-	@cp app.xml app.xml.out
-	@$(SED) -i s/{PACKAGE_ID}/$(PACKAGE_ID)/g app.xml.out
-	@$(SED) -i s/{APP_FILE}/$(APP_FILE)/g app.xml.out
-	@$(SED) -i s/{APP_TITLE}/$(APP_TITLE)/g app.xml.out
-	@$(SED) -i s/{VER_NUMBER}/$(VER_NUMBER)/g app.xml.out
-	@$(SED) -i s/{VER_LABEL}/$(VER_LABEL)/g app.xml.out
-	@$(SED) -i s/{ORIENTATION}/$(ORIENTATION)/g app.xml.out
-	@$(SED) -i s/{AUTO_ORIENT}/$(AUTO_ORIENT)/g app.xml.out
-	@$(SED) -i s/{RENDER_MODE}/$(RENDER_MODE)/g app.xml.out
-	@$(SED) -i s/{EXTENSION_IDS}/'$(patsubst %,\n\t\t<extensionID>%<\/extensionID>,$(ANE_EXT_IDS))'/g app.xml.out
+	@rm -f $(APP_XML_OUT)
+	@cp app.xml $(APP_XML_OUT)
+	@$(SED) -i s/{PACKAGE_ID}/$(PACKAGE_ID)/g   $(APP_XML_OUT)
+	@$(SED) -i s/{APP_FILE}/$(APP_FILE)/g       $(APP_XML_OUT)
+	@$(SED) -i s/{APP_TITLE}/$(APP_TITLE)/g     $(APP_XML_OUT)
+	@$(SED) -i s/{VER_NUMBER}/$(VER_NUMBER)/g   $(APP_XML_OUT)
+	@$(SED) -i s/{VER_LABEL}/$(VER_LABEL)/g     $(APP_XML_OUT)
+	@$(SED) -i s/{ORIENTATION}/$(ORIENTATION)/g $(APP_XML_OUT)
+	@$(SED) -i s/{AUTO_ORIENT}/$(AUTO_ORIENT)/g $(APP_XML_OUT)
+	@$(SED) -i s/{RENDER_MODE}/$(RENDER_MODE)/g $(APP_XML_OUT)
+	@$(SED) -i s/{EXTENSION_IDS}/'$(patsubst %,\n\t\t<extensionID>%<\/extensionID>,$(ANE_EXT_IDS))'/g $(APP_XML_OUT)
